@@ -713,3 +713,29 @@ class Cytomine(object):
 
         return uf
 
+    def import_datasets(self, path: str, storage_id: int) -> bool:
+        """Import datasets from a given path."""
+
+        upload_host = self._base_url(with_base_path=False)
+
+        response = self._session.post(
+            f"{upload_host}/import",
+            auth=CytomineAuth(
+                self._public_key,
+                self._private_key,
+                upload_host,
+                "",
+            ),
+            headers=self._headers(content_type="application/json"),
+            params={
+                "path": path,
+                "storage_id": storage_id,
+            },
+        )
+
+        if response.status_code != requests.codes.ok:
+            self._logger.error("Error during datasets upload.")
+            return False
+
+        self._logger.info("Datasets uploaded successfully")
+        return response.json()
