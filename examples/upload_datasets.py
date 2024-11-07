@@ -1,7 +1,6 @@
 """Example to import datasets into Cytomine."""
 
 import logging
-import os
 import sys
 from argparse import ArgumentParser
 
@@ -31,7 +30,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--path",
-        help="The path to the datasets to import",
+        default="/dataset",
+        help="The path specified in DATASET_PATH environment variable",
     )
     params, _ = parser.parse_known_args(sys.argv[1:])
 
@@ -40,11 +40,6 @@ if __name__ == "__main__":
         public_key=params.public_key,
         private_key=params.private_key,
     ) as cytomine:
-
-        # Check that the datasets path exists on your file system
-        if not os.path.exists(params.path):
-            raise ValueError(f"{params.path} does not exist!")
-
         # To import the datasets, we need to know the ID of your Cytomine storage.
         storages = StorageCollection().fetch()
         storage = next(
