@@ -726,15 +726,16 @@ class Cytomine(object):
                 upload_host,
                 "",
             ),
-            headers=self._headers(content_type="application/json"),
+            headers=self._headers(content_type="text/plain"),
             params={
+                "host": upload_host,
                 "path": path,
                 "storage_id": storage_id,
             },
         )
 
         if response.status_code != requests.codes.ok:
-            self._logger.error("Error during datasets upload.")
+            self._logger.error("Error during datasets upload: %s", response.text)
             return False
 
         self._logger.info("Datasets uploaded successfully")
