@@ -42,6 +42,7 @@ from argparse import ArgumentParser
 from cachecontrol import CacheControlAdapter
 from requests_toolbelt import MultipartEncoder
 from requests_toolbelt.utils import dump
+from typing import Union, Dict
 
 
 def _cytomine_parameter_name_synonyms(name, prefix="--"):
@@ -755,3 +756,34 @@ class Cytomine(object):
 
         return uf
 
+    def import_datasets(
+        self,
+        path: str,
+        storage_id: int
+    ) -> Union[bool, Dict[str, str]]:
+        """Import datasets from a given path."""
+
+        upload_host = self._base_url(with_base_path=False)
+
+        response = self._session.post(
+            f"{upload_host}/import",
+            auth=CytomineAuth(
+                self._public_key,
+                self._private_key,
+                upload_host,
+                "",
+            ),
+            headers=self._headers(content_type="text/plain"),
+            params={
+                "host": upload_host,
+                "path": path,
+                "storage_id": storage_id,
+            },
+        )
+
+        if response.status_code != requests.codes.ok:
+            self._logger.error("Error during datasets upload: %s", response.text)
+            return False
+
+        self._logger.info("Datasets uploaded successfully")
+        return response.json()
