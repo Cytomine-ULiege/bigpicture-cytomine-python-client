@@ -14,23 +14,19 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+# pylint: disable=invalid-name
 
 import re
-
 
 from cytomine.cytomine import Cytomine
 from cytomine.models.annotation import Annotation
 from cytomine.models.collection import Collection, DomainCollection
-from cytomine.models.model import Model, DomainModel
+from cytomine.models.model import DomainModel, Model
 
 
 class Property(DomainModel):
     def __init__(self, object, key=None, value=None, **attributes):
-        super(Property, self).__init__(object)
+        super().__init__(object)
         self.key = key
         self.value = value
         self.populate(attributes)
@@ -50,7 +46,7 @@ class Property(DomainModel):
         if self._by_key and self.domainClassName and self.domainIdent and self.key:
             uri = f"domain/{self.domainClassName}/{self.domainIdent}/key/{self.key}/property.json"
         else:
-            uri = super(Property, self).uri()
+            uri = super().uri()
 
         if self.domainClassName == "annotation":
             uri = uri.replace("domain/", "")
@@ -76,21 +72,22 @@ class Property(DomainModel):
             f"- Key: {self.key} - Value {self.value}"
         )
 
+
 class PropertyCollection(DomainCollection):
     def __init__(self, object, filters=None, max=0, offset=0, **parameters):
-        super(PropertyCollection, self).__init__(Property, object, filters, max, offset)
+        super().__init__(Property, object, filters, max, offset)
         self._allowed_filters = [None]
         self.set_parameters(parameters)
 
     def uri(self, without_filters=False):
-        uri = super(PropertyCollection, self).uri(without_filters)
+        uri = super().uri(without_filters)
         if self._domainClassName == "annotation":
             uri = uri.replace("domain/", "")
         return uri
 
     def as_dict(self):
         """Transform the property collection into a python dictionary mapping keys
-            with their respective Property objects.
+        with their respective Property objects.
         """
         return {p.key: p for p in self}
 
@@ -110,7 +107,7 @@ class PropertyCollection(DomainCollection):
 
 class AttachedFile(DomainModel):
     def __init__(self, object, filename=None, file=None, **attributes):
-        super(AttachedFile, self).__init__(object)
+        super().__init__(object)
         self.filename = filename
         self.file = file
         self.url = None
@@ -131,46 +128,51 @@ class AttachedFile(DomainModel):
     def upload(self):
         if self.file:
             return Cytomine.get_instance().upload_file(
-                self, self.file, uri='attachedfile.json',
+                self,
+                self.file,
+                uri="attachedfile.json",
                 query_parameters={
                     "domainClassName": self.domainClassName,
                     "domainIdent": self.domainIdent,
-                    "filename": self.filename
-                }
+                    "filename": self.filename,
+                },
             )
-        else:
-            return Cytomine.get_instance().upload_file(
-                self, self.filename,
-                query_parameters={
-                    "domainClassName": self.domainClassName,
-                    "domainIdent": self.domainIdent
-                }
-            )
+
+        return Cytomine.get_instance().upload_file(
+            self,
+            self.filename,
+            query_parameters={
+                "domainClassName": self.domainClassName,
+                "domainIdent": self.domainIdent,
+            },
+        )
 
     def download(self, destination="{filename}", override=False):
         if self.is_new():
             raise ValueError("Cannot download file if not existing ID.")
 
         pattern = re.compile("{(.*?)}")
-        destination = re.sub(pattern, lambda m: str(getattr(self, str(m.group(0))[1:-1], "_")), destination)
+        destination = re.sub(
+            pattern,
+            lambda m: str(getattr(self, str(m.group(0))[1:-1], "_")),
+            destination,
+        )
 
         return Cytomine.get_instance().download_file(
-            f"{self.callback_identifier}/{self.id}/download",
-            destination,
-            override
+            f"{self.callback_identifier}/{self.id}/download", destination, override
         )
 
 
 class AttachedFileCollection(DomainCollection):
     def __init__(self, object, filters=None, max=0, offset=0, **parameters):
-        super(AttachedFileCollection, self).__init__(AttachedFile, object, filters, max, offset)
+        super().__init__(AttachedFile, object, filters, max, offset)
         self._allowed_filters = [None]
         self.set_parameters(parameters)
 
 
 class Description(DomainModel):
     def __init__(self, object, data=None, **attributes):
-        super(Description, self).__init__(object)
+        super().__init__(object)
         self.data = data
         self.populate(attributes)
 
@@ -186,31 +188,32 @@ class Description(DomainModel):
 
 class Tag(Model):
     def __init__(self, name=None, **attributes):
-        super(Tag, self).__init__()
+        super().__init__()
         self.name = name
         self.populate(attributes)
 
 
 class TagCollection(Collection):
     def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(TagCollection, self).__init__(Tag, filters, max, offset)
+        super().__init__(Tag, filters, max, offset)
         self._allowed_filters = [None]
         self.set_parameters(parameters)
 
 
 class TagDomainAssociation(DomainModel):
     def __init__(self, object, tag=None, **attributes):
-        super(TagDomainAssociation, self).__init__(object)
+        super().__init__(object)
         self.tag = tag
         self.populate(attributes)
 
     def uri(self):
         if self.id:
-            uri = f"tag_domain_association/{self.id}.json"
-        elif self.domainClassName and self.domainIdent:
-            uri = super(TagDomainAssociation, self).uri()
+            return f"tag_domain_association/{self.id}.json"
 
-        return uri
+        if self.domainClassName and self.domainIdent:
+            return super().uri()
+
+        return None
 
     @property
     def callback_identifier(self):
@@ -219,7 +222,7 @@ class TagDomainAssociation(DomainModel):
 
 class TagDomainAssociationCollection(DomainCollection):
     def __init__(self, object, filters=None, max=0, offset=0, **parameters):
-        super(TagDomainAssociationCollection, self).__init__(TagDomainAssociation, object, filters, max, offset)
+        super().__init__(TagDomainAssociation, object, filters, max, offset)
         self._allowed_filters = [None]
         self.set_parameters(parameters)
 

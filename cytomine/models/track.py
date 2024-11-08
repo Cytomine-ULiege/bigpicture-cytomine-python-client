@@ -14,11 +14,7 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
+# pylint: disable=invalid-name
 
 from cytomine.cytomine import Cytomine
 from cytomine.models.collection import Collection
@@ -27,7 +23,7 @@ from cytomine.models.model import Model
 
 class Track(Model):
     def __init__(self, name=None, id_image=None, color=None, **attributes):
-        super(Track, self).__init__()
+        super().__init__()
         self.name = name
         self.image = id_image
         self.color = color
@@ -36,14 +32,20 @@ class Track(Model):
 
 class TrackCollection(Collection):
     def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(TrackCollection, self).__init__(Track, filters, max, offset)
+        super().__init__(Track, filters, max, offset)
         self._allowed_filters = ["project", "imageinstance"]
         self.set_parameters(parameters)
 
 
 class AnnotationTrack(Model):
-    def __init__(self, annotation_class_name=None, id_annotation=None, id_track=None, **attributes):
-        super(AnnotationTrack, self).__init__()
+    def __init__(
+        self,
+        annotation_class_name=None,
+        id_annotation=None,
+        id_track=None,
+        **attributes,
+    ):
+        super().__init__()
         self.annotationClassName = annotation_class_name
         self.annotationIdent = id_annotation
         self.track = id_track
@@ -57,7 +59,8 @@ class AnnotationTrack(Model):
 
         if self.annotationIdent is None and id_annotation is None:
             raise ValueError("Cannot fetch a model with no annotation ID.")
-        elif self.track is None and id_track is None:
+
+        if self.track is None and id_track is None:
             raise ValueError("Cannot fetch a model with no term ID.")
 
         if id_annotation is not None:

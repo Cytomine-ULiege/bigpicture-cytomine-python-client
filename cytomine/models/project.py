@@ -14,31 +14,23 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+# pylint: disable=invalid-name
 
 from cytomine import Cytomine
-
-
 from cytomine.models.collection import Collection
 from cytomine.models.model import Model
 
 
 class Project(Model):
     def __init__(self, name=None, id_ontology=None, **attributes):
-        super(Project, self).__init__()
+        super().__init__()
         self.name = name
         self.ontology = id_ontology
         self.ontologyName = None
-        self.discipline = None
         self.blindMode = None
-        self.disciplineName = None
         self.numberOfSlides = None
         self.numberOfImages = None
         self.numberOfAnnotations = None
-        self.numberOfJobAnnotations = None
         self.retrievalProjects = None
         self.numberOfReviewedAnnotations = None
         self.retrievalDisable = None
@@ -63,30 +55,18 @@ class Project(Model):
 
     def delete_user(self, id_user, admin=False):
         if admin:
-            return Cytomine.get_instance().delete(f"project/{self.id}/user/{id_user}/admin.json")
+            return Cytomine.get_instance().delete(
+                f"project/{self.id}/user/{id_user}/admin.json"
+            )
 
         return Cytomine.get_instance().delete(f"project/{self.id}/user/{id_user}.json")
 
 
 class ProjectCollection(Collection):
     def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(ProjectCollection, self).__init__(Project, filters, max, offset)
-        self._allowed_filters = [None, "user", "software", "ontology"]
+        super().__init__(Project, filters, max, offset)
+        self._allowed_filters = [None, "user", "ontology"]
         self.set_parameters(parameters)
 
     def save(self, *args, **kwargs):
         raise NotImplementedError("Cannot save a project collection by client.")
-
-
-class Discipline(Model):
-    def __init__(self, name=None, **attributes):
-        super(Discipline, self).__init__()
-        self.name = name
-        self.populate(attributes)
-
-
-class DisciplineCollection(Collection):
-    def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(DisciplineCollection, self).__init__(Discipline, filters, max, offset)
-        self._allowed_filters = [None]
-        self.set_parameters(parameters)

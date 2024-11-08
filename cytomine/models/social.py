@@ -14,11 +14,7 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
+# pylint: disable=arguments-differ,invalid-name
 
 from cytomine.models.collection import Collection
 from cytomine.models.model import Model
@@ -26,7 +22,7 @@ from cytomine.models.model import Model
 
 class Position(Model):
     def __init__(self):
-        super(Position, self).__init__()
+        super().__init__()
         self.user = None
         self.image = None
         self.slice = None
@@ -50,7 +46,7 @@ class Position(Model):
 
 class PositionCollection(Collection):
     def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(PositionCollection, self).__init__(Position, filters, max, offset)
+        super().__init__(Position, filters, max, offset)
         self._allowed_filters = ["imageinstance", "sliceinstance"]
 
         self.user = None
@@ -66,7 +62,7 @@ class PositionCollection(Collection):
 
 class AnnotationAction(Model):
     def __init__(self):
-        super(AnnotationAction, self).__init__()
+        super().__init__()
         self.user = None
         self.image = None
         self.slice = None
@@ -92,7 +88,7 @@ class AnnotationAction(Model):
 
 class AnnotationActionCollection(Collection):
     def __init__(self, filters=None, max=0, offset=0, **parameters):
-        super(AnnotationActionCollection, self).__init__(AnnotationAction, filters, max, offset)
+        super().__init__(AnnotationAction, filters, max, offset)
         self._allowed_filters = ["imageinstance"]
 
         self.user = None
@@ -104,9 +100,10 @@ class AnnotationActionCollection(Collection):
     def callback_identifier(self):
         return "annotation_action"
 
+
 class ProjectConnection(Model):
     def __init__(self, project=None, user=None, **attributes):
-        super(ProjectConnection, self).__init__()
+        super().__init__()
         self.project = project
         self.user = user
         self.countViewedImages = None
@@ -124,46 +121,50 @@ class ProjectConnection(Model):
 
     def save(self, *args, **kwargs):
         raise NotImplementedError("Cannot save a ProjectConnection by client.")
-    
+
     def delete(self, *args, **kwargs):
         raise NotImplementedError("Cannot delete a ProjectConnection by client.")
-    
+
     def update(self, *args, **kwargs):
         raise NotImplementedError("Cannot update a ProjectConnection by client.")
 
     def fetch(self, *args, **kwargs):
         raise NotImplementedError("Cannot fetch a ProjectConnection by client.")
-    
+
     def __str__(self):
         return (
             f"[{self.callback_identifier}] {self.id}: "
             f"[user] {self.user}, [project] {self.project}"
         )
 
+
 class ProjectConnectionCollection(Collection):
     def __init__(self, project, user, filters=None, max=0, offset=0, **parameters):
-        super(ProjectConnectionCollection, self).__init__(ProjectConnection, filters, max, offset)
+        super().__init__(ProjectConnection, filters, max, offset)
         self._allowed_filters = [None]
         self.project = project
         self.user = user
         self.set_parameters(parameters)
 
     def uri(self):
-        return f'project/{self.project}/userconnection/{self.user}.json'
+        return f"project/{self.project}/userconnection/{self.user}.json"
 
     def save(self, *args, **kwargs):
-        raise NotImplementedError("Cannot save a ProjectConnection collection by client.")
+        raise NotImplementedError(
+            "Cannot save a ProjectConnection collection by client."
+        )
+
 
 class ImageConsultation(Model):
     def __init__(self, image=None, user=None, **attributes):
-        super(ImageConsultation, self).__init__()
+        super().__init__()
         self.project = None
         self.user = user
         self.image = image
         self.imageName = None
         self.imageThumb = None
         self.mode = None
-        self.projectConnection = None 
+        self.projectConnection = None
         self.time = None
         self.updated = None
         self.countCreatedAnnotations = None
@@ -175,25 +176,26 @@ class ImageConsultation(Model):
 
     def save(self, *args, **kwargs):
         raise NotImplementedError("Cannot save a ImageConsultation by client.")
-    
+
     def delete(self, *args, **kwargs):
         raise NotImplementedError("Cannot delete a ImageConsultation by client.")
-    
+
     def update(self, *args, **kwargs):
         raise NotImplementedError("Cannot update a ImageConsultation by client.")
 
     def fetch(self, *args, **kwargs):
         raise NotImplementedError("Cannot fetch a ImageConsultation by client.")
-    
+
     def __str__(self):
         return (
             f"[{self.callback_identifier}] {self.id}: "
             f"[user] {self.user}, [image] {self.image}"
         )
 
+
 class ImageConsultationCollection(Collection):
     def __init__(self, project, user, filters=None, max=0, offset=0, **parameters):
-        super(ImageConsultationCollection, self).__init__(ImageConsultation, filters, max, offset)
+        super().__init__(ImageConsultation, filters, max, offset)
         self._allowed_filters = [None]
         self.project = project
         self.user = user
@@ -203,4 +205,6 @@ class ImageConsultationCollection(Collection):
         return f"project/{self.project}/user/{self.user}/imageconsultation.json"
 
     def save(self, *args, **kwargs):
-        raise NotImplementedError("Cannot save a ImageConsultation collection by client.")
+        raise NotImplementedError(
+            "Cannot save a ImageConsultation collection by client."
+        )

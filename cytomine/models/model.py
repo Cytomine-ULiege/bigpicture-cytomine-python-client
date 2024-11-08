@@ -14,19 +14,16 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+# pylint: disable=invalid-name,unused-argument
 
+import json
 
 import six
-import json
 
 from cytomine.cytomine import Cytomine
 
 
-class Model(object):
+class Model:
     def __init__(self, **attributes):
         # In some cases, a model can have some request parameters.
         self._query_parameters = {}
@@ -49,8 +46,8 @@ class Model(object):
     def save(self):
         if self.id is None:
             return Cytomine.get_instance().post_model(self)
-        else:
-            return self.update()
+
+        return self.update()
 
     def delete(self, id=None):
         if self.id is None and id is None:
@@ -87,7 +84,11 @@ class Model(object):
         return self
 
     def to_json(self, **dump_parameters):
-        d = dict((k, v) for k, v in six.iteritems(self.__dict__) if v is not None and not k.startswith("_"))
+        d = dict(
+            (k, v)
+            for k, v in six.iteritems(self.__dict__)
+            if v is not None and not k.startswith("_")
+        )
         if "uri_" in d:
             d["uri"] = d.pop("uri_")
         return json.dumps(d, **dump_parameters)
@@ -112,7 +113,7 @@ class Model(object):
 
 class DomainModel(Model):
     def __init__(self, object, **attributes):
-        super(DomainModel, self).__init__(**attributes)
+        super().__init__(**attributes)
 
         if object.is_new():
             raise ValueError("The object must be fetched or saved before.")
