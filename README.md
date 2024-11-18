@@ -1,9 +1,9 @@
-# Cytomine Python client
+# Bigpicture Cytomine Python client
 
 > Cytomine-python-client is an open-source Cytomine client written in Python. This client is a Python wrapper around Cytomine REST API gateway.
 
-[![GitHub release](https://img.shields.io/github/release/Cytomine-ULiege/Cytomine-python-client.svg)](https://github.com/Cytomine-ULiege/Cytomine-python-client/releases)
-[![GitHub](https://img.shields.io/github/license/Cytomine-ULiege/Cytomine-python-client.svg)](https://github.com/Cytomine-ULiege/Cytomine-python-client/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/Cytomine-ULiege/bigpicture-cytomine-python-client.svg)](https://github.com/Cytomine-ULiege/bigpicture-cytomine-python-client/releases)
+[![GitHub](https://img.shields.io/github/license/Cytomine-ULiege/bigpicture-cytomine-python-client.svg)](https://github.com/Cytomine-ULiege/bigpicture-cytomine-python-client/blob/master/LICENSE)
 
 ## Overview
 
@@ -17,44 +17,11 @@ See [documentation](https://doc.uliege.cytomine.org/dev-guide/clients/python/usa
 
 ## Install
 
-**To install *official* release of Cytomine-python-client, see [@cytomine](https://github.com/cytomine/Cytomine-python-client). Follow this guide to install forked version by ULiege.**
-
-### Automatic installation
-
-To retrieve package using `pip`:
-```bash
-pip install --extra-index-url=https://packagecloud.io/cytomine-uliege/Cytomine-python-client/pypi/simple cytomine-python-client
-```
-
-or, to add the extra index permanently to your `pip` configuration:
-```bash
-curl -s https://packagecloud.io/install/repositories/cytomine-uliege/Cytomine-python-client/script.python.sh | bash
-pip install cytomine-python-client
-```
-
-See [package repository](https://packagecloud.io/cytomine-uliege/Cytomine-python-client) for details.
-
-### Manual installation
-
-To download and install manually the package in a Python env, run (here for version 2.7.3):
+The client can be installed from the github repository using pip:
 
 ```bash
-wget https://github.com/Cytomine-ULiege/Cytomine-python-client/releases/download/v2.7.3/Cytomine-Python-Client-2.7.3.zip 
-unzip Cytomine-Python-Client-2.7.3.zip
-cd Cytomine-Python-Client-2.7.3
-pip install .
+pip install 'cytomine-python-client @ git+https://github.com/Cytomine-ULiege/bigpicture-cytomine-python-client.git'
 ```
-
-### In a Docker container
-
-To ease developpement of new Cytomine software, the Cytomine-python-client package is available in Docker containers:
-* [cytomineuliege/software-python3-base](https://hub.docker.com/r/cytomineuliege/software-python3-base/) provides a Python 3.5 environment with client already installed.
-
-These Docker images are tagged with the Python client version number. Two image variants are given for each client version:
-* `cytomineuliege/software-pythonX-base:<version>` is the defacto image. If you are unsure about what your needs are, you probably want to use this one.
-* `cytomineuliege/software-pythonX-base:<version>-slim` is an image that does not contain all the common package contained in the default tag and only contains the minimal packages needed to run Python. If you are working in an environment where only the python image will be deployed and you have space constraints, we recommend to use this one.
-
-See [official python Docker image](https://hub.docker.com/_/python/) for more details.
 
 ## Usage
 
