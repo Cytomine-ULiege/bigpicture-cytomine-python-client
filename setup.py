@@ -24,7 +24,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 setup(
     name='cytomine-python-client',
-    version='x.x.x',
+    version='1.0.0',
     description='Python client to interact with Cytomine.',
     long_description=long_description,
     long_description_content_type="text/markdown",
