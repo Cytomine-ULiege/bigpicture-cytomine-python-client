@@ -867,11 +867,7 @@ class Cytomine:
 
         return uf
 
-    def import_datasets(
-        self,
-        path: str,
-        storage_id: int
-    ) -> Union[bool, Dict[str, str]]:
+    def import_datasets(self, storage_id: int) -> Union[bool, Dict[str, str]]:
         """Import datasets from a given path."""
 
         upload_host = self._base_url(with_base_path=False)
@@ -886,8 +882,6 @@ class Cytomine:
             ),
             headers=self._headers(content_type="text/plain"),
             params={
-                "host": upload_host,
-                "path": path,
                 "storage_id": storage_id,
             },
         )
