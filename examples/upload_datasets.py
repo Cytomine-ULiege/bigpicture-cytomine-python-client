@@ -28,11 +28,6 @@ if __name__ == "__main__":
         "--private_key",
         help="The Cytomine private key",
     )
-    parser.add_argument(
-        "--path",
-        default="/dataset",
-        help="The path specified in DATASET_PATH environment variable",
-    )
     params, _ = parser.parse_known_args(sys.argv[1:])
 
     with Cytomine(
@@ -48,6 +43,6 @@ if __name__ == "__main__":
         if not storage:
             raise ValueError("Storage not found")
 
-        response = cytomine.import_datasets(params.path, storage.id)
+        response = cytomine.import_datasets(storage.id)
 
         print(response)
