@@ -867,7 +867,7 @@ class Cytomine:
 
         return uf
 
-    def import_datasets(self, storage_id: int) -> Union[bool, Dict[str, str]]:
+    def import_datasets(self, storage_id: int) -> Dict[str, str]:
         """Import datasets from a given path."""
 
         upload_host = self._base_url(with_base_path=False)
@@ -888,7 +888,7 @@ class Cytomine:
 
         if response.status_code != requests.codes.ok:
             self._logger.error("Error during datasets upload: %s", response.text)
-            return False
+            return {}
 
         self._logger.info("Datasets uploaded successfully")
         return response.json()
